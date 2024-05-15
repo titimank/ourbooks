@@ -4,13 +4,13 @@
             <div>
                 <div>
                     <h3>Login</h3>
-                    <hr/>
+                    <hr />
                 </div>
                 <div class="alert alert-danger" v-if="error">{{ error }}</div>
                 <form @submit.prevent="onLogin()">
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="text" class="form-control" v-model.trim="email"/>
+                        <input type="text" class="form-control" v-model.trim="email" />
                     </div>
                     <div class="error" v-if="error.email">{{ error.email }}</div>
                     <div class="form-group">
@@ -24,10 +24,13 @@
                             Login
                         </button>
                     </div>
+                    <div>
+                        {{ userLogin }}
+                    </div>
                 </form>
             </div>
         </div>
-    </div> 
+    </div>
 </template>
 
 <script>
@@ -42,9 +45,9 @@ export default {
             email: '', 
             password: '',
             errors: [],
-            error:'',
+            error: '',
+            userLogin: null
         };
-
     },
     methods: {
         ...mapActions('auth',{
@@ -67,17 +70,45 @@ export default {
             this.showLoading(true);
             
             try {
-                await this.login({
-                    email: this.email, 
-                    password: this.password,
-                });
-
+                // await this.login({
+                //     email: this.email, 
+                //     password: this.password,
+                // });
+                this.PostLoginUser(this.email, this.password)
             } catch(e){
                 this.error = e;
                 this.showLoading(false);
             }
             this.showLoading(false);
+        }, async PostLoginUser(email, password) {
+            console.log(process.env.VUE_APP_API_URL);
+            try {
+                const requestBody = {
+                    email: email,
+                    password: password
+                };
+                const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/login`, {
+                    method: "POST",
+                    headers: {
+                        'Authorization': `Bearer ${process.env.VUE_APP_ACCESS_TOKEN}`,  // Add your token here
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                if (!response.ok) {
+                    return "error";
+                }
+                const data = await response.json();
+                console.log(data);
+                this.userLogin = data;
+                document.cookie = `${encodeURIComponent("access-token")}=${this.userLogin.access_token};`
+            } catch (error) {
+                return "catch";
+            }
         },
     },
+    // created() {
+    //     this.PostLoginUser()
+    // }
 };
 </script>

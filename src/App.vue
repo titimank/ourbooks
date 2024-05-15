@@ -6,6 +6,11 @@
       <div class="col-md-12">
         <div>
           <router-view></router-view>
+          <!-- <div>{{ accessToken }}</div>
+          <hr>
+          <div>{{ UsersData }}</div>
+          <hr>
+          <div>{{ BooksData }}</div> -->
         </div>
       </div>
     </div>
@@ -19,7 +24,14 @@ import TheLoader from './components/TheLoader.vue';
 import {mapState} from 'vuex';
 export default {
   name: 'App',
-  computed:{
+  data() {
+    return {
+      BooksData: null,
+      UsersData: null,
+      accessToken: null
+    };
+  },
+  computed: {
     ...mapState({
       showLoading: state => state.showLoading
     }),
@@ -27,6 +39,66 @@ export default {
   components: {
     NavBar,
     TheLoader,
+  },
+  methods: {
+    // const accessToken = decodeURIComponent(),
+    getAccessToken() {
+      let cookieName = encodeURIComponent("access-token")
+      let cookieStart = document.cookie.indexOf(cookieName)
+      let cookieEnd
+      if(cookieStart > -1) {
+        cookieEnd = document.cookie.indexOf(';', cookieStart)
+      }
+      if (cookieEnd == -1) {
+        cookieEnd = document.cookie.length
+      }
+      this.accessToken = document.cookie.substring(cookieStart + cookieName.length+1, cookieEnd)
+    },
+    async getAllBooks() {
+      console.log(process.env.VUE_APP_API_URL);
+      try {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/books`, {
+          method: "GET",
+          headers: {
+            'Authorization': `Bearer ${this.accessToken}`,  // Add your token here
+            'Content-Type': 'application/json'
+          }
+        });
+        if (!response.ok) {
+          return "error";
+        }
+        const data = await response.json();
+        console.log(data);
+        this.BooksData = data;
+      } catch (error) {
+        return "catch";
+      }
+    },
+    async getAllUsers() {
+      console.log(process.env.VUE_APP_API_URL);
+      try {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/users`, {
+          method: "GET",
+          headers: {
+            'Authorization': `Bearer ${this.accessToken}`,  // Add your token here
+            'Content-Type': 'application/json'
+          }
+        });
+        if (!response.ok) {
+          return "error";
+        }
+        const data = await response.json();
+        console.log(data);
+        this.UsersData = data;
+      } catch (error) {
+        return "catch";
+      }
+    },
+  },
+  created() {
+    this.getAccessToken()
+    this.getAllUsers()
+    this.getAllBooks()
   }
 }
 </script>
