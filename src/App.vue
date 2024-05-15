@@ -1,15 +1,32 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <NavBar/>
+  <the-loader v-if="showLoading"></the-loader>
+  <div class="contrainer">
+    <div class="row">
+      <div class="col-md-12">
+        <div>
+          <router-view></router-view>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+// import HelloWorld from './components/HelloWorld.vue'
+import NavBar from './components/NavBar.vue';
+import TheLoader from './components/TheLoader.vue';
+import {mapState} from 'vuex';
 export default {
   name: 'App',
+  computed:{
+    ...mapState({
+      showLoading: state => state.showLoading
+    }),
+  },
   components: {
-    HelloWorld
+    NavBar,
+    TheLoader,
   }
 }
 </script>
