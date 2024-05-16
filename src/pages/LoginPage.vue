@@ -4,34 +4,40 @@
             <div>
                 <div>
                     <h3>Login</h3>
-                    <hr/>
+                    <hr />
                 </div>
-                <div class="alert alert-danger" v-if="error">{{ error }}</div>
+                <!-- <div class="alert alert-danger" v-if="error">{{ error }}</div> -->
                 <form @submit.prevent="onLogin()">
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="text" class="form-control" v-model.trim="email"/>
+                        <input type="text" class="form-control" v-model.trim="email" />
+                        <div v-if="error.email">{{ error.email }}</div>
                     </div>
-                    <div class="error" v-if="error.email">{{ error.email }}</div>
                     <div class="form-group">
                         <label>Password</label>
                         <input type="password" class="form-control" v-model.trim="password" />
+                        <div  v-if="error.password">{{ error.password }}</div>
                     </div>
-                    <div class="error" v-if="error.password">{{ error.password }}</div>
 
                     <div class="my-3">
                         <button type="submit" class="btn btn-primary">
                             Login
                         </button>
                     </div>
+                    <div>
+                        {{ userLogin }}
+                    </div>
+                    <div>
+                        {{ LoginMe }}
+                    </div>
                 </form>
             </div>
         </div>
-    </div> 
+    </div>
 </template>
 
 <script>
-import SignupValidations from '@/services/SignupValidations';
+import LoginValidations from '@/services/LoginValidations';
 import { mapActions } from 'vuex';
 import{mapMutations} from 'vuex';
 import { LOGIN_ACTION,LOADING_SPINNER_SHOW_MUTATION, } from '../store/storeconstants';
@@ -42,9 +48,10 @@ export default {
             email: '', 
             password: '',
             errors: [],
-            error:'',
+            error: '',
+            userLogin: null,
+            LoginMe: null
         };
-
     },
     methods: {
         ...mapActions('auth',{
@@ -54,12 +61,12 @@ export default {
             showLoading: LOADING_SPINNER_SHOW_MUTATION,
         }),
         async onLogin(){
-            let validations = new SignupValidations(
+            let validations = new LoginValidations(
                 this.email, 
                 this.password,
                 );
-            this.errors = validations.checkValidations();
-            if(this.errors.length){
+            this.error = validations.checkValidations();
+            if(this.errors.length<1){
                 // if('email' in this.errors || 'password' in this.errors){
                     return false;
             }
@@ -71,13 +78,67 @@ export default {
                 //     email: this.email, 
                 //     password: this.password,
                 // });
-
+                this.PostLoginUser(this.email, this.password)
             } catch(e){
                 this.error = e;
                 this.showLoading(false);
             }
             this.showLoading(false);
+        }, async PostLoginUser(email, password) {
+            console.log(process.env.VUE_APP_API_URL);
+            try {
+                const requestBody = {
+                    email: email,
+                    password: password
+                };
+                const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/login`, {
+                    method: "POST",
+                    headers: {
+                        'Authorization': `Bearer ${process.env.VUE_APP_ACCESS_TOKEN}`,  // Add your token here
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                if (!response.ok) {
+                    return "error";
+                }
+                const data = await response.json();
+                console.log(data);
+                this.userLogin = data;
+                document.cookie = `${encodeURIComponent("access-token")}=${this.userLogin.access_token};`
+            } catch (error) {
+                return "catch";
+            }
+        },
+        async getLoginMe(email, password) {
+            console.log(process.env.VUE_APP_API_URL);
+            try {
+                const requestBody = {
+                    email: email,
+                    password: password
+                };
+                const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/me`, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': `Bearer ${process.env.VUE_APP_ACCESS_TOKEN}`,  // Add your token here
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                if (!response.ok) {
+                    return "error";
+                }
+                const data = await response.json();
+                console.log(data);
+                this.LoginMe = data;
+                document.cookie = `${encodeURIComponent("access-token")}=${this.LoginMe.access_token};`
+            } catch (error) {
+                return "catch";
+            }
         },
     },
+    // created() {
+    //     this.PostLoginUser()
+    // }
 };
 </script>

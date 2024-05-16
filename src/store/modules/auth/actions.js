@@ -131,11 +131,11 @@ export default{
            postData,
        );
        } catch(err){
-           let errorMessage = SignupValidations.getErrorMessageFromCode(
-               err.response.data.error.errors[0].message,
-           );
+        //    let errorMessage = SignupValidations.getErrorMessageFromCode(
+        //        err.response.data.error.errors[0].message,
+        //    );
            // console.log(errorMessage);
-           throw errorMessage;
+        //    throw errorMessage;
 
        }
     },
