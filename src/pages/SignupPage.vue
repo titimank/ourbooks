@@ -5,18 +5,20 @@
         <h3>Sign Up</h3>
         <hr/>
     </div>
-    <div class="alert alert-danger" v-if="error">{{ error }}</div>
+    <!-- <div class="alert alert-danger" v-if="error">{{ error }}</div> -->
         <form @submit.prevent="onSignup()">
             <div class="form-group">
                 <label>Email</label>
-                <input type="text" class="form-control" v-model.trim="email" />
-                <div class="error" v-if="error.email">{{ error.email }}</div>
+                <input type="text" placeholder="Enter email" v-model.trim='email' />
+                <div class="form-text text-muted" v-if="error.email">{{ error.email }}</div>
+                <!-- <div class="alert alert-danger" v-if="error">{{ error.email }}</div> -->
 
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-control" v-model.trim="password" />
-                <div class="error" v-if="error.password">{{ error.password }}</div>
+                <input type="password" placeholder="Enter Password" v-model.trim='password' />
+                <div class="form-text text-muted" v-if="error.password">{{ error.password }}</div>
+                <!-- <div class="alert alert-danger" v-if="error">{{ error.password }}</div> -->
 
             </div>
             <div class="my-3">
@@ -32,6 +34,9 @@
 </template>
 
 <script>
+
+// import Validations from '@/services/Validations';
+
 import SignupValidations from '@/services/SignupValidations';
 import{mapActions} from 'vuex';
 import{mapMutations} from 'vuex';
@@ -44,8 +49,12 @@ export default {
             password:'',
             errors:[],
             error:'',
+
+            // errors:{},
+
         }
     },
+
     methods: {
 
         ...mapActions('auth', {
@@ -56,17 +65,20 @@ export default {
         ...mapMutations({
             showLoading: LOADING_SPINNER_SHOW_MUTATION,
         }),
+
         onSignup(){
             let validations = new SignupValidations(
                 this.email, 
                 this.password,
                 );
-            this.errors = validations.checkValidations();
-            if(this.errors.length){
+            this.error = validations.checkValidations();
+            if(this.errors.length < 1){
             // if('email' in this.errors || 'password' in this.errors){
                 return false;
             }
-            this.signup({email: this.email, password: this.password
+            this.signup({
+                email: this.email, 
+                password: this.password
             }).catch((error) =>{
                 // console.log(error);
             this.error = error;

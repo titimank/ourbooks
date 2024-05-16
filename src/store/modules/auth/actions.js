@@ -1,5 +1,7 @@
 import Axios from 'axios';
 import SignupValidations from '../../../services/SignupValidations';
+import AddbookValidations from '../../../services/SignupValidations';
+
 import {
 //     AUTH_ACTION,
     LOGIN_ACTION,
@@ -7,6 +9,7 @@ import {
 //     LOGOUT_ACTION,
     SET_USER_TOKEN_DATA_MUTATION,
     SIGNUP_ACTION,
+    ADDBOOK_ACTION,
 //     AUTO_LOGOUT_ACTION,
 //     SET_AUTO_LOGOUT_MUTATION,
 } from '../../storeconstants';
@@ -137,6 +140,36 @@ export default{
        }
     },
 
+    async[ADDBOOK_ACTION](context, payload) {
+        // return context.dispatch(AUTH_ACTION, {
+        //     ...payload,
+        //     url: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA9HEOZrRHZP026VQObeDz2PVD_GLpMV50`,
+        // });
+
+        let postData = {
+            bookName:payload.bookName,
+            bookAuthor: payload.bookAuthor,
+            bookCategory: this.bookCategory,
+            bookTitle: this.bookTitle,
+            bookDesc: this.bookDesc,
+            returnSecureToken: true,
+        };
+        let response ='';
+        try {
+    // eslint-disable-next-line no-unused-vars
+             response = await Axios.post(
+                'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC4VUCB3a2L3eHQ8YOdDtRhc6TLeMJUoNc',
+        postData,
+        );
+} catch(err){
+   let errorMessage = AddbookValidations.getErrorMessageFromCode(
+       err.response.data.error.errors[0].message,
+   );
+   // console.log(errorMessage);
+   throw errorMessage;
+
+}
+},
 
 
     async[SIGNUP_ACTION](context,payload){

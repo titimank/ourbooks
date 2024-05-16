@@ -3,6 +3,8 @@ import LoginPage from './pages/LoginPage.vue';
 import SignupPage from './pages/SignupPage.vue';
 import FindPlace from './pages/FindPlace.vue';
 import NotFound from './pages/NotFound.vue';
+import AddBook from './pages/AddBook.vue';
+
 
 
 const routes = [
@@ -10,6 +12,8 @@ const routes = [
     {path: '/signup', component: SignupPage},
     { path: '/place', component: FindPlace },
     { path: "/:pathMatch(.*)*", name: "notfound", component: NotFound },
+    { path: '/addbook', component: AddBook },
+
 
 ];
 

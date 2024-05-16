@@ -1,5 +1,9 @@
 export const SIGNUP_ACTION = '[actions] signup user';
 export const LOGIN_ACTION = '[actions] login user';
+export const ADDBOOK_ACTION = '[actions] add a book';
+
+
+
 // export const LOGOUT_ACTION = '[actions] Logout User';
 // export const AUTO_LOGOUT_ACTION = '[actions] auto logout';
 // export const AUTH_ACTION = '[actions] DO User Auth';

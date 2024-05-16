@@ -30,6 +30,10 @@ export default class SignupValidations {
                 return 'Email Not Found';
             case 'INVALID_PASSWORD':
                 return 'Invalid Password';
+        
+            // case 'INVALID_EMAIL':
+            //     return 'Invaliddd Email';
+
             default:
                 return 'Unexpected error occurred. Please try again';
         }

@@ -67,10 +67,10 @@ export default {
             this.showLoading(true);
             
             try {
-                await this.login({
-                    email: this.email, 
-                    password: this.password,
-                });
+                // await this.login({
+                //     email: this.email, 
+                //     password: this.password,
+                // });
 
             } catch(e){
                 this.error = e;
