@@ -3,14 +3,15 @@ import LoginPage from './pages/LoginPage.vue';
 import SignupPage from './pages/SignupPage.vue';
 import FindPlace from './pages/FindPlace.vue';
 import NotFound from './pages/NotFound.vue';
+import UserPage from './pages/UserPage.vue';
 
 
 const routes = [
-    {path: '/login', component: LoginPage},
-    {path: '/signup', component: SignupPage},
-    { path: '/place', component: FindPlace },
-    { path: "/:pathMatch(.*)*", name: "notfound", component: NotFound },
-
+  { path: "/login", component: LoginPage },
+  { path: "/signup", component: SignupPage },
+  { path: "/place", component: FindPlace },
+  { path: "/user", component: UserPage },
+  { path: "/:pathMatch(.*)*", name: "notfound", component: NotFound },
 ];
 
 const  router = createRouter({

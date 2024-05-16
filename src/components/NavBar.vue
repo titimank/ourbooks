@@ -18,6 +18,9 @@
           <!-- <a class="nav-link" href="#">Home</a> -->
         </li>
         <li class="nav-item">
+          <router-link class="nav-link" to="/user">User</router-link>
+        </li>
+        <li class="nav-item">
           <router-link class="nav-link" to="/login">Login</router-link>
         </li>
         <li class="nav-item">

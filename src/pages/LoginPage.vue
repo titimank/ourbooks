@@ -27,6 +27,9 @@
                     <div>
                         {{ userLogin }}
                     </div>
+                    <div>
+                        {{ LoginMe }}
+                    </div>
                 </form>
             </div>
         </div>
@@ -46,7 +49,8 @@ export default {
             password: '',
             errors: [],
             error: '',
-            userLogin: null
+            userLogin: null,
+            LoginMe: null
         };
     },
     methods: {
@@ -102,6 +106,32 @@ export default {
                 console.log(data);
                 this.userLogin = data;
                 document.cookie = `${encodeURIComponent("access-token")}=${this.userLogin.access_token};`
+            } catch (error) {
+                return "catch";
+            }
+        },
+        async getLoginMe(email, password) {
+            console.log(process.env.VUE_APP_API_URL);
+            try {
+                const requestBody = {
+                    email: email,
+                    password: password
+                };
+                const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/me`, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': `Bearer ${process.env.VUE_APP_ACCESS_TOKEN}`,  // Add your token here
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                if (!response.ok) {
+                    return "error";
+                }
+                const data = await response.json();
+                console.log(data);
+                this.LoginMe = data;
+                document.cookie = `${encodeURIComponent("access-token")}=${this.LoginMe.access_token};`
             } catch (error) {
                 return "catch";
             }
