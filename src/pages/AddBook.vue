@@ -152,7 +152,7 @@ export default {
                 // console.log(error);
             this.error = error;
             });
-            this.postBookId(this.bookTitle, this.bookDesc)
+            this.postBookId(this.bookName, this.bookAuthor, this.bookCategory, this.bookTitle, this.bookDesc)
         },
         getAccessToken() {
             let cookieName = encodeURIComponent("access-token")
@@ -177,10 +177,13 @@ export default {
             }
             this.userId = document.cookie.substring(cookieStart + cookieName.length + 1, cookieEnd)
         },
-        async postBookId(title, description) {
+        async postBookId(bookName, bookAuthor, bookCategory, title, description) {
             try {
                 const requestBody = {
                     userId: Number(this.userId),
+                    bookName: bookName,
+                    bookAuthor: bookAuthor,
+                    bookCategory: bookCategory,
                     title: title,
                     description: description
                 };
@@ -193,7 +196,6 @@ export default {
                     body: JSON.stringify(requestBody)
                 });
                 if (!response.ok) {
-                    console.log("bomb")
                     return "error";
                 }
                 const data = await response.json();
