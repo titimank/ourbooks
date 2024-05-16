@@ -1,25 +1,14 @@
 import Validations from './Validations';
 
-export default class SignupValidations {
-    constructor(firstname,lastname,email, password,phone,address) {
-        this.firstname = firstname;
-        this.lastname = lastname;
+export default class LoginValidations {
+    constructor(email, password) {
+
         this.email = email;
         this.password = password;
-        this.phone =phone;
-        this.address= address;
     }
 
     checkValidations() {
         let errors = [];
-
-        if (!Validations.minLength(this.firstname, 1 )) {
-            errors['firstname'] = 'Plase enter name';
-        }
-
-        if (!Validations.minLength(this.lastname, 1 )) {
-            errors['lastname'] = 'Plase enter name';
-        }
 
         //email validations
         if (!Validations.checkEmail(this.email)) {
@@ -34,15 +23,6 @@ export default class SignupValidations {
         // if (!this.phone.(this.phone, 10  )) {
         //     errors['bookName'] = 'Please enter a valid phone number';
         // }
-
-        if (!/^\d{10}$/.test(this.phone)) {
-            errors['phone'] = 'Please enter a valid phone number';
-        }
-
-
-        if (!Validations.minLength(this.address, 1 )) {
-            errors['address'] = 'Plase enter address';
-        }
 
         return errors;
     }

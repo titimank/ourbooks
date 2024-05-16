@@ -8,7 +8,7 @@
 
         <div class="form-group">
                 <label>Categoty</label>
-                <select v-model='DonationCategoy'  >
+                <select v-model='donationCategory'  >
                     <option selected value="">Donates</option>
                     <option>Accept donations</option>
                 </select>
@@ -101,6 +101,7 @@ export default {
         return{
             // email:'',
             // password:'',
+            donationCategory:'',
             bookName:'',
             bookAuthor:'',
             bookCategory:'',
@@ -141,6 +142,7 @@ export default {
                 return false;
             }
             this.addbook({
+                donationCategory: this.donationCategory,
                 bookName: this.bookName,
                 bookAuthor: this.bookAuthor,
                 bookCategory: this.bookCategory,
@@ -156,7 +158,7 @@ export default {
             console.log('CANCEL SUBMIT');
     // กระทำตามที่คุณต้องการเมื่อยกเลิกการส่งข้อมูล
     // สามารถเรียกใช้งาน route หรือเปิด modal เพื่อแจ้งให้ผู้ใช้ทราบ
-        }
+        },
 
     },
 };
