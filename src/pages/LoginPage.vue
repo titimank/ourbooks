@@ -66,13 +66,12 @@ export default {
                 this.password,
                 );
             this.error = validations.checkValidations();
-            if(this.errors.length<1){
+            if(this.error.length>1){
                 // if('email' in this.errors || 'password' in this.errors){
                     return false;
             }
             this.error ='';
             this.showLoading(true);
-            
             try {
                 // await this.login({
                 //     email: this.email, 
@@ -85,7 +84,7 @@ export default {
             }
             this.showLoading(false);
         }, async PostLoginUser(email, password) {
-            console.log(process.env.VUE_APP_API_URL);
+            console.log(email);
             try {
                 const requestBody = {
                     email: email,
@@ -94,7 +93,6 @@ export default {
                 const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/login`, {
                     method: "POST",
                     headers: {
-                        'Authorization': `Bearer ${process.env.VUE_APP_ACCESS_TOKEN}`,  // Add your token here
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(requestBody)
@@ -103,8 +101,8 @@ export default {
                     return "error";
                 }
                 const data = await response.json();
-                console.log(data);
                 this.userLogin = data;
+                document.cookie = `${encodeURIComponent("user-id")}=${this.userLogin.userId};`
                 document.cookie = `${encodeURIComponent("access-token")}=${this.userLogin.access_token};`
             } catch (error) {
                 return "catch";

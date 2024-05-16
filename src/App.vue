@@ -63,7 +63,7 @@ export default {
     async getAllBooks() {
       console.log(process.env.VUE_APP_API_URL);
       try {
-        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/books`, {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/donations`, {
           method: "GET",
           headers: {
             'Authorization': `Bearer ${this.accessToken}`,  // Add your token here
@@ -83,7 +83,7 @@ export default {
     async getBookId() {
       console.log(process.env.VUE_APP_API_URL);
       try {
-        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/books/{id}`, {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/donations/{id}`, {
           method: "GET",
           headers: {
             'Authorization': `Bearer ${this.accessToken}`,  // Add your token here
@@ -103,7 +103,7 @@ export default {
     async postBookId() {
       console.log(process.env.VUE_APP_API_URL);
       try {
-        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/books`, {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/donations`, {
           method: "POST",
           headers: {
             'Authorization': `Bearer ${this.accessToken}`,  // Add your token here
@@ -123,7 +123,7 @@ export default {
     async putBookId() {
       console.log(process.env.VUE_APP_API_URL);
       try {
-        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/books/{id}`, {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/donations/{id}`, {
           method: "PUT",
           headers: {
             'Authorization': `Bearer ${this.accessToken}`,  // Add your token here
@@ -143,7 +143,7 @@ export default {
     async deleteBookId() {
       console.log(process.env.VUE_APP_API_URL);
       try {
-        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/books/{id}`, {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/donations/{id}`, {
           method: "DELETE",
           headers: {
             'Authorization': `Bearer ${this.accessToken}`,  // Add your token here
@@ -165,10 +165,10 @@ export default {
     this.getAccessToken()
     // this.getAllUsers()
     this.getAllBooks()
-    this.getBookId()
-    this.postBookId()
-    this.putBookId()
-    this.deleteBookId()
+    // this.getBookId()
+    // this.postBookId()
+    // this.putBookId()
+    // this.deleteBookId()
   }
 }
 </script>

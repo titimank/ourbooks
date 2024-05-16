@@ -106,7 +106,10 @@ export default {
             bookAuthor:'',
             bookCategory:'',
             bookTitle:'',
-            bookDesc:'',
+            bookDesc: '',
+            accessToken: null,
+            userId: null,
+            PostBookIdData: null,
 
             errors:[],
             error:'',
@@ -118,10 +121,7 @@ export default {
         ...mapActions('auth', {
             // signup: SIGNUP_ACTION
             addbook: ADDBOOK_ACTION
-
-
         }),
-
         ...mapMutations({
             showLoading: LOADING_SPINNER_SHOW_MUTATION,
         }),
@@ -136,7 +136,7 @@ export default {
             //     return false;
             // }
             this.error = validations.checkValidations();
-            if(this.error.length < 3 ){
+            if(this.error.length > 3 ){
             // if('email' in this.errors || 'password' in this.errors){
                 console.log('Add more Name');
                 return false;
@@ -152,6 +152,55 @@ export default {
                 // console.log(error);
             this.error = error;
             });
+            this.postBookId(this.bookTitle, this.bookDesc)
+        },
+        getAccessToken() {
+            let cookieName = encodeURIComponent("access-token")
+            let cookieStart = document.cookie.indexOf(cookieName)
+            let cookieEnd
+            if (cookieStart > -1) {
+                cookieEnd = document.cookie.indexOf(';', cookieStart)
+            }
+            if (cookieEnd == -1) {
+                cookieEnd = document.cookie.length
+            }
+            this.accessToken = document.cookie.substring(cookieStart + cookieName.length + 1, cookieEnd)
+        }, getUserId() {
+            let cookieName = encodeURIComponent("user-id")
+            let cookieStart = document.cookie.indexOf(cookieName)
+            let cookieEnd
+            if (cookieStart > -1) {
+                cookieEnd = document.cookie.indexOf(';', cookieStart)
+            }
+            if (cookieEnd == -1) {
+                cookieEnd = document.cookie.length
+            }
+            this.userId = document.cookie.substring(cookieStart + cookieName.length + 1, cookieEnd)
+        },
+        async postBookId(title, description) {
+            try {
+                const requestBody = {
+                    userId: Number(this.userId),
+                    title: title,
+                    description: description
+                };
+                const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/donations`, {
+                    method: "POST",
+                    headers: {
+                        'Authorization': `Bearer ${this.accessToken}`,  // Add your token here
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                if (!response.ok) {
+                    console.log("bomb")
+                    return "error";
+                }
+                const data = await response.json();
+                this.PostBookIdData = data;
+            } catch (error) {
+                return "catch";
+            }
         },
 
         onCancel(){
@@ -161,5 +210,9 @@ export default {
         },
 
     },
+    created() {
+        this.getAccessToken()
+        this.getUserId()
+    }
 };
 </script>
