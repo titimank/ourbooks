@@ -3,9 +3,10 @@
 import Validations from "./Validations";
 
 export default class AddbookValidations {
-    constructor(bookName, bookCategory) {
+    constructor(bookName, bookCategory, bookImage) {
         this.bookName = bookName;
         this.bookCategory = bookCategory;
+        this.bookImage = bookImage;
     }
 
     minLength(value, length) {
@@ -21,6 +22,9 @@ export default class AddbookValidations {
         }
         if (!this.bookCategory || this.bookCategory === '') {
             errors['bookCategory'] = 'Please select a category.';
+        }
+        if (!this.bookImage) {
+            errors['bookImage'] = 'Please upload an image.';
         }
 
         // console.log("Please fill the information!")

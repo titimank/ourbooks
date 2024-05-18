@@ -1,6 +1,7 @@
 <template>
 <div>
     <li>
+        {{bookImage }}
     <h1>{{ bookName }}</h1>
     <button @click="showDetails()">more details</button>
     <transition name="fade">
@@ -71,7 +72,11 @@ export default{
         },
         isVisible:{
             typr: Boolean
-        }
+        },
+        bookImage:{
+            type: String
+        },
+
     },
 
     

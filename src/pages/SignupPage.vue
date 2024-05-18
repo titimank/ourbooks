@@ -129,6 +129,14 @@ export default {
                 // console.log(error);
             this.error = error;
             });
+
+
+            //no error go to homepage-unvaliable
+            if (Object.keys(this.error).length === 0) {
+                console.log("ok")
+                this.$router.push('/');
+            }
+
             // this.PostSignupUser(this.firstname, this.lastname, this.email, this.password, this.phone, this.address)
     // }},
         },

@@ -83,6 +83,13 @@ export default {
                 this.showLoading(false);
             }
             this.showLoading(false);
+
+            // if (Object.keys(this.error).length === 0) {
+            //     this.$router.push('/');
+            // }
+
+
+
         }, async PostLoginUser(email, password) {
             console.log(email);
             try {

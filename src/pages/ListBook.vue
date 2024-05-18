@@ -31,6 +31,9 @@
                             :bookCategory="item.bookCategory"
                             :bookDesc="item.bookDesc"
                             :bookCon="item.bookCon"
+
+                            :bookImage="item.bookImage"
+
                             :isVisible="item.isVisible"
                             @show="toggleVisible"
             />
@@ -55,6 +58,8 @@ export default{
     // props:["books"]
     data(){
         return {
+
+            //exsample info//
             // books:[
             //     {bookId:1, bookName:"พระอภัยมณี" , bookAuthor:"สุนทรภู่", bookCategory:"Horror", bookDesc:"นิทานพื้นบ้าน", isVisible:false},
             //     {bookId:2, bookName:"รามเกียรติ" , bookAuthor:"รัชกาลที่ 5", bookCategory:"Magazine", bookCon:"ปกพอง เคยเปียกน้ำ", isVisible:false},
@@ -64,8 +69,8 @@ export default{
         };
     },
     methods:{
-            addBook(book) {
-                this.books.push(book);
+            addBook(books) {
+                this.books.push(books);
             },
 
 
