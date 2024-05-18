@@ -43,7 +43,7 @@
                 </div>
                 <div class="form-group">
                     <label>Phone</label>
-                    <input type="text"  v-model.trim="phone" />
+                    <input type="text"  v-model.trim="phone" @input="phone = $event.target.value.replace(/[^0-9]/g, '')" maxlength="10"/>
                     <div class="form-text text-muted" v-if="error.phone">{{ error.phone }}</div>
                 </div>
                 <div class="form-group">
@@ -57,7 +57,6 @@
                         Sign up
                     </button>
                 </div>
-
             </form>
         </div>
     </div>
@@ -83,7 +82,8 @@ export default {
             phone: '',
             address: '',
             errors:[],
-            error: '',
+            error: {},
+
             userSignup: null
         };
     },
@@ -95,27 +95,16 @@ export default {
         ...mapMutations({
             showLoading: LOADING_SPINNER_SHOW_MUTATION,
         }),
-
-
-        // onSignup(){
-            // let validations = new SignupValidations(
-            //     this.email, 
-            //     this.password,
-            //     );
-            // this.error = validations.checkValidations();
-            // if(this.errors.length < 1){
-
+        
         onSignup() {
-            this.PostSignupUser(this.firstname, this.lastname, this.email, this.password, this.phone, this.address)
-            // let validations = new SignupValidations(
-            //     this.firstname,
-            //     this.lastname,
-            //     this.email, 
-            //     this.password,
-            //     this.phone,
-            //     this.address
-            //     );
-            // this.errors = validations.checkValidations();
+            this.PostSignupUser(
+                this.firstname, 
+                this.lastname, 
+                this.email, 
+                this.password, 
+                this.phone, 
+                this.address)
+
             let validations = new SignupValidations(
                 this.firstname,
                 this.lastname,
@@ -126,13 +115,10 @@ export default {
                 );
             this.error = validations.checkValidations();
             // if(this.errors.length < 1){
-            if(this.errors.length < 1){
- // if('email' in this.errors || 'password' in this.errors){
-                return false;
+            if(this.error.length === 0 ){
+                return true;
         }
             this.signup({
-                // email: this.email, 
-                // password: this.password
                 firstname: this.firstname, 
                 lastname: this.lastname, 
                 email: this.email, 
@@ -176,7 +162,60 @@ export default {
                 return "catch";
             }
         },
-    }
+    },
+
+    watch: {
+        firstname() {
+            if (this.firstname.length > 2) {
+                this.error.firstname = '';
+            }
+        },
+        lastname(){
+            if(this.lastname.length > 2) {
+                this.error.lastname = '';
+            }
+        },
+        email() {
+            // let validations = new SignupValidations(
+            //     this.email,
+            //     email // ใช้ค่า email ใหม่ที่เปลี่ยนแปลง
+            // );
+            // let isValidEmail = validations.checkValidations().length === 0;
+
+            // // ใช้ === เพื่อเปรียบเทียบค่ากับ true
+            // if (isValidEmail) {
+            //     this.error.email = '';
+            // }
+            if(this.email.length > 3) {
+                this.error.email = '';
+            }
+        },                      
+        password(){
+            if(this.password.length > 5) {
+                this.error.password = '';
+            }
+        },        
+        phone(){
+            if(this.phone.length !== 10) {
+                this.error.phone= 'Phone number must be 10 digits long';
+            }
+            if(this.phone.length === 10) {
+                this.error.phone= '';
+            }
+        },        
+        address(){
+            if(this.phone.length < 10) {
+                this.error.phone= 'Please enter address';
+            }
+            if(this.address.length > 10) {
+                this.error.address = '';
+            }
+
+        },
+    },
+
+
+
 };
 
 </script>

@@ -7,16 +7,21 @@
         <div>
           <router-view></router-view>
           <div>{{ accessToken }}</div>
-          <hr>
           <div>{{ UsersData }}</div>
-          <hr>
           <div>{{ BooksData }}</div>
-          <hr>
           <div>{{ BookIdData }}</div>
         </div>
       </div>
     </div>
   </div>
+
+
+  <!-- <div>
+    <section class="listbook-content">
+       <ListBook/>
+    </section>
+  </div> -->
+
 </template>
 
 <script>
@@ -24,10 +29,19 @@
 import NavBar from './components/NavBar.vue';
 import TheLoader from './components/TheLoader.vue';
 import {mapState} from 'vuex';
+// import ListBook from './pages/ListBook.vue';
 export default {
   name: 'App',
   data() {
     return {
+
+//additional
+      // books:[
+      //   {bookName:"A" , bookAuthor:"Are "},
+      //   {bookName:"B" , bookAuthor:"Bre "},
+
+
+      // ],
       PostBookIdData: null,
       BooksData: null,
       BookIdData: null,
@@ -45,6 +59,7 @@ export default {
   components: {
     NavBar,
     TheLoader,
+    // ListBook,
   },
   methods: {
     // const accessToken = decodeURIComponent(),
@@ -182,9 +197,29 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+
+
+/* *{
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+}
+.listbook-content{
+  box-shadow: 0 2px 8px rgb(0, 0, 0, 0.26);
+  margin: 3rem;
+  border-radius: 10 px ;
+  padding: 1rem;
+  text-align: center;
+
+} */
+
+
+
 </style>
 
-
+<!-- /* 
     // async getAllUsers() {
     // console.log(process.env.VUE_APP_API_URL);
     // try {
@@ -204,4 +239,4 @@ export default {
     // } catch (error) {
     // return "catch";
     // }
-    // },
+    // }, */ -->

@@ -13,12 +13,12 @@ export default class SignupValidations {
     checkValidations() {
         let errors = [];
 
-        if (!Validations.minLength(this.firstname, 1 )) {
-            errors['firstname'] = 'Plase enter name';
+        if (!Validations.minLength(this.firstname, 3 )) {
+            errors['firstname'] = 'Plase enter Firstname';
         }
 
-        if (!Validations.minLength(this.lastname, 1 )) {
-            errors['lastname'] = 'Plase enter name';
+        if (!Validations.minLength(this.lastname, 3 )) {
+            errors['lastname'] = 'Plase enter Lastname';
         }
 
         //email validations
@@ -36,13 +36,15 @@ export default class SignupValidations {
         // }
 
         if (!/^\d{10}$/.test(this.phone)) {
-            errors['phone'] = 'Please enter a valid phone number';
+            errors['phone'] = 'Please enter phone number';
         }
 
 
-        if (!Validations.minLength(this.address, 1 )) {
+        if (!Validations.minLength(this.address, 10 )) {
             errors['address'] = 'Plase enter address';
         }
+
+        // console.log("Please fill the information!")
 
         return errors;
     }

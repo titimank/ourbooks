@@ -19,19 +19,11 @@ export default class AddbookValidations {
         if (!Validations.minLength(this.bookName, 3)) {
             errors['bookName'] = 'Book name must be at least 3 characters long.';
         }
-
-        //password Validations
-        // if (!Validations.minLength(this.password, 6)) {
-        //     errors['password'] = 'password should be of 6 characters';
-        // }
-
-        // if (!Validations.minLength(this.bookCategory)) {
-        //     errors['bookCategory'] = 'Please select category';
-        // }
-        
         if (!this.bookCategory || this.bookCategory === '') {
             errors['bookCategory'] = 'Please select a category.';
         }
+
+        // console.log("Please fill the information!")
 
         return errors;
     }

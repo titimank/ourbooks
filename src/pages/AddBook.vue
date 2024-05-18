@@ -6,14 +6,14 @@
     </div>    
                     <form @submit.prevent="onAddBook()">
 
-        <div class="form-group">
+        <!-- <div class="form-group">
                 <label>Categoty</label>
                 <select v-model='donationCategory'  >
                     <option selected value="">Donates</option>
                     <option>Accept donations</option>
                 </select>
-                <!-- <div class="error" v-if="error.bookCategory">{{ error.bookCategory }}</div> -->
-                </div>
+        </div> -->
+
         <hr/>
 
     <!-- <div class="alert alert-danger" v-if="error">{{ error }}</div> -->
@@ -53,35 +53,20 @@
                 <!-- <div class="error" v-if="error"bookAuthor">{{ error"bookAuthor }}</div> -->
             <!-- </div> -->
             <div class="form-group">
-                <label>Title</label>
-                <input type="text"  v-model.trim='bookTitle' />
-                <!-- <div class="error" v-if="error.bookTitle">{{ error.bookTitle }}</div> -->
-            </div>
-            <div class="form-group">
                 <label>Description</label>
-                <input type="text" v-model.trim='bookDesc' />
+                <input type="text"  v-model.trim='bookDesc' />
                 <!-- <div class="error" v-if="error.bookDesc">{{ error.bookDesc }}</div> -->
             </div>
-            <div class="my-3">
-                <button type="submit" class="btn btn-primary">
-                    Submit
-                </button>
-                
-                <button type="cancle" class="btn btn-primary">
-                    Cancle
-                </button>
+            <div class="form-group">
+                <label>Condition</label>
+                <input type="text" v-model.trim='bookCon' />
+                <!-- <div class="error" v-if="error.bookCon">{{ error.bookCon }}</div> -->
             </div>
-
-<!-- 
-            methods: {
-    onCancel(){
-        console.log('CANCEL SUBMIT');
-        this.show = false;
-        this.$router.push({ name: 'users' });
-    }
-} -->
-
-
+            <div class="my-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                &puncsp;
+                <button type="button" @click="resetForm" class="btn btn-primary">Cancel</button>
+            </div>
 
         </form>
     </div>
@@ -90,30 +75,37 @@
 </template>
 
 <script>
+// import { watch } from 'vue';
 import AddbookValidations from '@/services/AddbookValidations';
 // import Validations from '@/services/Validations';
-import{mapActions} from 'vuex';
-import{mapMutations} from 'vuex';
+import{mapActions,mapMutations} from 'vuex';
 import{LOADING_SPINNER_SHOW_MUTATION, ADDBOOK_ACTION} from '../store/storeconstants';
+
 
 export default {
     data(){
         return{
             // email:'',
             // password:'',
-            donationCategory:'',
+            // donationCategory:'',
             bookName:'',
             bookAuthor:'',
             bookCategory:'',
-            bookTitle:'',
-            bookDesc: '',
+            bookDesc:'',
+            bookCon: '',
+
+            // errors:[],
+            // error:'',
+            error:{},
+
+
             accessToken: null,
             userId: null,
             PostBookIdData: null,
 
-            errors:[],
-            error:'',
-        }
+            // errors:{},
+            // error:{},
+        };
     },
 
     methods: {
@@ -126,33 +118,55 @@ export default {
             showLoading: LOADING_SPINNER_SHOW_MUTATION,
         }),
         onAddBook(){
+            this.postBookId(
+                this.bookName,
+                this.bookAuthor,
+                this.bookCategory,
+                this.bookDesc, 
+                this.bookCon
+            )
+            // this.error = {};
             let validations = new AddbookValidations(
                 this.bookName,
                 this.bookCategory, 
                 );
-            // this.errors = validations.checkValidations();
-            // if(this.errors.length){
-            // // if('email' in this.errors || 'password' in this.errors){
-            //     return false;
-            // }
             this.error = validations.checkValidations();
-            if(this.error.length > 3 ){
-            // if('email' in this.errors || 'password' in this.errors){
-                console.log('Add more Name');
-                return false;
-            }
+            if(this.error.length === 0 ){
+                return true;
+             } 
             this.addbook({
-                donationCategory: this.donationCategory,
+                // donationCategory: this.donationCategory,
                 bookName: this.bookName,
                 bookAuthor: this.bookAuthor,
                 bookCategory: this.bookCategory,
-                bookTitle: this.bookTitle,
-                bookDesc: this.bookDesc
+                bookDesc: this.bookDesc,
+                bookCon: this.bookCon,
+                isVisible: false
+
             }).catch((error) =>{
                 // console.log(error);
             this.error = error;
             });
-            this.postBookId(this.bookTitle, this.bookDesc)
+
+            const addbook = {
+                bookId: Date.now(),
+                bookName: this.bookName,
+                bookAuthor: this.bookAuthor,
+                bookCategory: this.bookCategory,
+                bookDesc: this.bookDesc,
+                bookCon: this.bookCon,
+                isVisible: false
+            };
+            this.$emit('add-book', addbook);
+            this.resetForm();
+
+
+            if (Object.keys(this.error).length === 0) {
+                console.log("ok")
+                this.$router.push('/');
+            }
+
+
         },
         getAccessToken() {
             let cookieName = encodeURIComponent("access-token")
@@ -203,13 +217,42 @@ export default {
             }
         },
 
-        onCancel(){
-            console.log('CANCEL SUBMIT');
-    // กระทำตามที่คุณต้องการเมื่อยกเลิกการส่งข้อมูล
-    // สามารถเรียกใช้งาน route หรือเปิด modal เพื่อแจ้งให้ผู้ใช้ทราบ
-        },
+        // onCancel(){
+        //     console.log('CANCEL SUBMIT');
+        //     this.resetForm();
+        // },
+
+        resetForm(){
+            this.bookName="";
+            this.bookAuthor="";
+            this.bookCategory="";
+            this.bookDesc="";
+            this.bookCon="";
+            this.error ={};
+        }
+
+        // submitForm(){
+
+        // }
+
+
+
 
     },
+
+    watch: {
+        bookName() {
+            if (this.bookName.length > 2) {
+                this.error.bookName = '';
+            }
+        },
+        bookCategory(){
+            if(this.error.length === 0) {
+                this.error.bookCategory = '';
+            }
+        },
+    },
+
     created() {
         this.getAccessToken()
         this.getUserId()
