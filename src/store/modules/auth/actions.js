@@ -150,8 +150,8 @@ export default{
             bookName:payload.bookName,
             bookAuthor: payload.bookAuthor,
             bookCategory: this.bookCategory,
-            bookTitle: this.bookTitle,
             bookDesc: this.bookDesc,
+            bookCon: this.bookCon,
             returnSecureToken: true,
         };
         let response ='';

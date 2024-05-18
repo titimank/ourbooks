@@ -48,7 +48,7 @@ export default {
             email: '', 
             password: '',
             errors: [],
-            error: '',
+            error: {},
             userLogin: null,
             LoginMe: null
         };
@@ -66,11 +66,11 @@ export default {
                 this.password,
                 );
             this.error = validations.checkValidations();
-            if(this.error.length>1){
+            if(this.error.length === 0){
                 // if('email' in this.errors || 'password' in this.errors){
-                    return false;
+                    return true;
             }
-            this.error ='';
+            // this.error ='';
             this.showLoading(true);
             try {
                 // await this.login({
@@ -138,5 +138,19 @@ export default {
     // created() {
     //     this.PostLoginUser()
     // }
+
+        watch: {
+            email() {
+                if (this.email.length > 3) {
+                    this.error.email = '';
+                }
+            },
+            password(){
+                if(this.password.length > 5) {
+                    this.error.password = '';
+                }
+            },
+        }
+
 };
 </script>

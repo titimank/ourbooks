@@ -6,6 +6,15 @@ import NotFound from './pages/NotFound.vue';
 import UserPage from './pages/UserPage.vue';
 import AddBook from './pages/AddBook.vue';
 
+import ListBook from './pages/ListBook.vue';
+
+import ShowBook from './pages/ShowBook.vue';
+
+import HomePage from './pages/HomePage.vue';
+
+
+
+
 
 
 const routes = [
@@ -15,6 +24,13 @@ const routes = [
   { path: "/user", component: UserPage },
   { path: "/:pathMatch(.*)*", name: "notfound", component: NotFound },
   { path: '/addbook', component: AddBook },
+  { path: '/', component: ListBook },
+  
+  { path: "/book", component: ShowBook },
+
+  { path: '/', component: HomePage },
+
+
 
 ];
 

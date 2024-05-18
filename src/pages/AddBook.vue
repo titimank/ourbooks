@@ -6,19 +6,29 @@
     </div>    
                     <form @submit.prevent="onAddBook()">
 
-        <div class="form-group">
+        <!-- <div class="form-group">
                 <label>Categoty</label>
                 <select v-model='donationCategory'  >
                     <option selected value="">Donates</option>
                     <option>Accept donations</option>
                 </select>
-                <!-- <div class="error" v-if="error.bookCategory">{{ error.bookCategory }}</div> -->
-                </div>
+        </div> -->
+
         <hr/>
 
     <!-- <div class="alert alert-danger" v-if="error">{{ error }}</div> -->
         <!-- <form @submit.prevent="onSignup()"> -->
             <!-- <form @submit.prevent="onAddBook()"> -->
+
+                <!-- อัพรูป -->
+            <div class="form-group">
+                <label>Book Image</label>
+                <input type="file" @change="onFileChange" />
+                <div class="error" v-if="error.bookImage">{{ error.bookImage }}</div>
+
+            </div>
+
+
             <div class="form-group">
                 <label>Book Name</label>
                 <input type="text" v-model.trim='bookName' />
@@ -53,35 +63,20 @@
                 <!-- <div class="error" v-if="error"bookAuthor">{{ error"bookAuthor }}</div> -->
             <!-- </div> -->
             <div class="form-group">
-                <label>Title</label>
-                <input type="text"  v-model.trim='bookTitle' />
-                <!-- <div class="error" v-if="error.bookTitle">{{ error.bookTitle }}</div> -->
-            </div>
-            <div class="form-group">
                 <label>Description</label>
-                <input type="text" v-model.trim='bookDesc' />
+                <input type="text"  v-model.trim='bookDesc' />
                 <!-- <div class="error" v-if="error.bookDesc">{{ error.bookDesc }}</div> -->
             </div>
-            <div class="my-3">
-                <button type="submit" class="btn btn-primary">
-                    Submit
-                </button>
-                
-                <button type="cancle" class="btn btn-primary">
-                    Cancle
-                </button>
+            <div class="form-group">
+                <label>Condition</label>
+                <input type="text" v-model.trim='bookCon' />
+                <!-- <div class="error" v-if="error.bookCon">{{ error.bookCon }}</div> -->
             </div>
-
-<!-- 
-            methods: {
-    onCancel(){
-        console.log('CANCEL SUBMIT');
-        this.show = false;
-        this.$router.push({ name: 'users' });
-    }
-} -->
-
-
+            <div class="my-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                &puncsp;
+                <button type="button" @click="resetForm" class="btn btn-primary">Cancel</button>
+            </div>
 
         </form>
     </div>
@@ -90,34 +85,41 @@
 </template>
 
 <script>
+// import { watch } from 'vue';
 import AddbookValidations from '@/services/AddbookValidations';
 // import Validations from '@/services/Validations';
-import{mapActions} from 'vuex';
-import{mapMutations} from 'vuex';
+import{mapActions,mapMutations} from 'vuex';
 import{LOADING_SPINNER_SHOW_MUTATION, ADDBOOK_ACTION} from '../store/storeconstants';
+
 
 export default {
     data(){
         return{
             // email:'',
             // password:'',
-            donationCategory:'',
+            // donationCategory:'',
             bookName:'',
             bookAuthor:'',
             bookCategory:'',
-            bookTitle:'',
-            bookDesc: '',
+            bookDesc:'',
+            bookCon: '',
+            bookImage: null,
+
+            // errors:[],
+            // error:'',
+            error:{},
+
+
             accessToken: null,
             userId: null,
             PostBookIdData: null,
 
-            errors:[],
-            error:'',
-        }
+            // errors:{},
+            // error:{},
+        };
     },
 
     methods: {
-
         ...mapActions('auth', {
             // signup: SIGNUP_ACTION
             addbook: ADDBOOK_ACTION
@@ -125,34 +127,68 @@ export default {
         ...mapMutations({
             showLoading: LOADING_SPINNER_SHOW_MUTATION,
         }),
+        //image
+        onFileChange(e) {
+            this.bookImage = e.target.files[0];
+        },
+
         onAddBook(){
+            this.postBookId(
+                this.bookName,
+                this.bookAuthor,
+                this.bookCategory,
+                this.bookDesc, 
+                this.bookCon,
+                this.bookImage,
+
+            )
+            // this.error = {};
             let validations = new AddbookValidations(
                 this.bookName,
                 this.bookCategory, 
+                this.bookImage,
                 );
-            // this.errors = validations.checkValidations();
-            // if(this.errors.length){
-            // // if('email' in this.errors || 'password' in this.errors){
-            //     return false;
-            // }
             this.error = validations.checkValidations();
-            if(this.error.length > 3 ){
-            // if('email' in this.errors || 'password' in this.errors){
-                console.log('Add more Name');
-                return false;
-            }
+            if(this.error.length === 0 ){
+                return true;
+             } 
             this.addbook({
-                donationCategory: this.donationCategory,
+                // donationCategory: this.donationCategory,
                 bookName: this.bookName,
                 bookAuthor: this.bookAuthor,
                 bookCategory: this.bookCategory,
-                bookTitle: this.bookTitle,
-                bookDesc: this.bookDesc
+                bookDesc: this.bookDesc,
+                bookCon: this.bookCon,
+                bookImage: this.bookImage,
+                isVisible: false
+
             }).catch((error) =>{
                 // console.log(error);
             this.error = error;
             });
-            this.postBookId(this.bookName, this.bookAuthor, this.bookCategory, this.bookTitle, this.bookDesc)
+
+            const addbook = {
+                bookId: Date.now(),
+                bookName: this.bookName,
+                bookAuthor: this.bookAuthor,
+                bookCategory: this.bookCategory,
+                bookDesc: this.bookDesc,
+                bookCon: this.bookCon,
+                bookImage: this.bookImage,
+                isVisible: false
+            };
+            this.$emit('add-book', addbook);
+            this.resetForm();
+
+
+            if (Object.keys(this.error).length === 0) {
+                console.log("ok")
+                this.$router.push('/');
+            }
+
+
+            this.postBookId(this.bookName, this.bookAuthor, this.bookCategory, this.bookDesc, this.bookCon, this.bookImage)
+
         },
         getAccessToken() {
             let cookieName = encodeURIComponent("access-token")
@@ -177,15 +213,16 @@ export default {
             }
             this.userId = document.cookie.substring(cookieStart + cookieName.length + 1, cookieEnd)
         },
-        async postBookId(bookName, bookAuthor, bookCategory, title, description) {
-            try {
+        async postBookId(bookName, bookAuthor, bookCategory, bookDesc, bookCon, bookImage) {
+                        try {
                 const requestBody = {
                     userId: Number(this.userId),
                     bookName: bookName,
                     bookAuthor: bookAuthor,
                     bookCategory: bookCategory,
-                    title: title,
-                    description: description
+                    bookDesc: bookDesc,
+                    bookCon: bookCon,
+                    bookImage: bookImage
                 };
                 const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/donations`, {
                     method: "POST",
@@ -205,13 +242,48 @@ export default {
             }
         },
 
-        onCancel(){
-            console.log('CANCEL SUBMIT');
-    // กระทำตามที่คุณต้องการเมื่อยกเลิกการส่งข้อมูล
-    // สามารถเรียกใช้งาน route หรือเปิด modal เพื่อแจ้งให้ผู้ใช้ทราบ
-        },
+        // onCancel(){
+        //     console.log('CANCEL SUBMIT');
+        //     this.resetForm();
+        // },
+
+        resetForm(){
+            this.bookName="";
+            this.bookAuthor="";
+            this.bookCategory="";
+            this.bookDesc="";
+            this.bookCon="";
+            this.bookImage=null;
+            this.error ={};
+        }
+
+        // submitForm(){
+
+        // }
+
+
+
 
     },
+
+    watch: {
+        bookName() {
+            if (this.bookName.length > 2) {
+                this.error.bookName = '';
+            }
+        },
+        bookCategory(){
+            if(this.error.length === 0) {
+                this.error.bookCategory = '';
+            }
+        },
+        bookImage(){
+            if(this.error.length === 0) {
+                this.error.bookImage = '';
+            }
+        },
+    },
+
     created() {
         this.getAccessToken()
         this.getUserId()
