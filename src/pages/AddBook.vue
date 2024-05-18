@@ -19,6 +19,16 @@
     <!-- <div class="alert alert-danger" v-if="error">{{ error }}</div> -->
         <!-- <form @submit.prevent="onSignup()"> -->
             <!-- <form @submit.prevent="onAddBook()"> -->
+
+                <!-- อัพรูป -->
+            <div class="form-group">
+                <label>Book Image</label>
+                <input type="file" @change="onFileChange" />
+                <div class="error" v-if="error.bookImage">{{ error.bookImage }}</div>
+
+            </div>
+
+
             <div class="form-group">
                 <label>Book Name</label>
                 <input type="text" v-model.trim='bookName' />
@@ -93,6 +103,7 @@ export default {
             bookCategory:'',
             bookDesc:'',
             bookCon: '',
+            bookImage: null,
 
             // errors:[],
             // error:'',
@@ -109,7 +120,6 @@ export default {
     },
 
     methods: {
-
         ...mapActions('auth', {
             // signup: SIGNUP_ACTION
             addbook: ADDBOOK_ACTION
@@ -117,18 +127,26 @@ export default {
         ...mapMutations({
             showLoading: LOADING_SPINNER_SHOW_MUTATION,
         }),
+        //image
+        onFileChange(e) {
+            this.bookImage = e.target.files[0];
+        },
+
         onAddBook(){
             this.postBookId(
                 this.bookName,
                 this.bookAuthor,
                 this.bookCategory,
                 this.bookDesc, 
-                this.bookCon
+                this.bookCon,
+                this.bookImage,
+
             )
             // this.error = {};
             let validations = new AddbookValidations(
                 this.bookName,
                 this.bookCategory, 
+                this.bookImage,
                 );
             this.error = validations.checkValidations();
             if(this.error.length === 0 ){
@@ -141,6 +159,7 @@ export default {
                 bookCategory: this.bookCategory,
                 bookDesc: this.bookDesc,
                 bookCon: this.bookCon,
+                bookImage: this.bookImage,
                 isVisible: false
 
             }).catch((error) =>{
@@ -155,6 +174,7 @@ export default {
                 bookCategory: this.bookCategory,
                 bookDesc: this.bookDesc,
                 bookCon: this.bookCon,
+                bookImage: this.bookImage,
                 isVisible: false
             };
             this.$emit('add-book', addbook);
@@ -166,6 +186,8 @@ export default {
                 this.$router.push('/');
             }
 
+
+            this.postBookId(this.bookName, this.bookAuthor, this.bookCategory, this.bookDesc, this.bookCon, this.bookImage)
 
         },
         getAccessToken() {
@@ -191,12 +213,16 @@ export default {
             }
             this.userId = document.cookie.substring(cookieStart + cookieName.length + 1, cookieEnd)
         },
-        async postBookId(title, description) {
-            try {
+        async postBookId(bookName, bookAuthor, bookCategory, bookDesc, bookCon, bookImage) {
+                        try {
                 const requestBody = {
                     userId: Number(this.userId),
-                    title: title,
-                    description: description
+                    bookName: bookName,
+                    bookAuthor: bookAuthor,
+                    bookCategory: bookCategory,
+                    bookDesc: bookDesc,
+                    bookCon: bookCon,
+                    bookImage: bookImage
                 };
                 const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/donations`, {
                     method: "POST",
@@ -207,7 +233,6 @@ export default {
                     body: JSON.stringify(requestBody)
                 });
                 if (!response.ok) {
-                    console.log("bomb")
                     return "error";
                 }
                 const data = await response.json();
@@ -228,6 +253,7 @@ export default {
             this.bookCategory="";
             this.bookDesc="";
             this.bookCon="";
+            this.bookImage=null;
             this.error ={};
         }
 
@@ -249,6 +275,11 @@ export default {
         bookCategory(){
             if(this.error.length === 0) {
                 this.error.bookCategory = '';
+            }
+        },
+        bookImage(){
+            if(this.error.length === 0) {
+                this.error.bookImage = '';
             }
         },
     },
