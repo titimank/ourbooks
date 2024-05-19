@@ -1,6 +1,6 @@
 <template>
     <!-- <NavBar /> -->
-    <the-loader v-if="showLoading"></the-loader>
+    <!-- <the-loader v-if="showLoading"></the-loader> -->
     <!-- <div class="contrainer"> -->
         <!-- <div class="row">
             <div class="col-md-12">
@@ -20,7 +20,7 @@
         </div> -->
     <!-- </div> -->
     <div>
-            <AddBook @add-book="addBook" />
+            <!-- <AddBook @add-book="addBook" /> -->
     <div>
         <ul >
             <ShowBook v-for="item in books"
@@ -31,9 +31,6 @@
                             :bookCategory="item.bookCategory"
                             :bookDesc="item.bookDesc"
                             :bookCon="item.bookCon"
-
-                            :bookImage="item.bookImage"
-
                             :isVisible="item.isVisible"
                             @show="toggleVisible"
             />
@@ -60,12 +57,12 @@ export default{
         return {
 
             //exsample info//
-            // books:[
-            //     {bookId:1, bookName:"พระอภัยมณี" , bookAuthor:"สุนทรภู่", bookCategory:"Horror", bookDesc:"นิทานพื้นบ้าน", isVisible:false},
-            //     {bookId:2, bookName:"รามเกียรติ" , bookAuthor:"รัชกาลที่ 5", bookCategory:"Magazine", bookCon:"ปกพอง เคยเปียกน้ำ", isVisible:false},
-            // ],
+            books:[
+                {bookId:1, bookName:"พระอภัยมณี" , bookAuthor:"สุนทรภู่", bookCategory:"Horror", bookDesc:"นิทานพื้นบ้าน", isVisible:false},
+                {bookId:2, bookName:"รามเกียรติ" , bookAuthor:"รัชกาลที่ 5", bookCategory:"Magazine", bookCon:"ปกพอง เคยเปียกน้ำ", isVisible:false},
+            ],
 
-            books: []
+            // books: []
         };
     },
     methods:{
@@ -74,15 +71,15 @@ export default{
             },
 
 
-            toggleVisible(bookId){
-                // console.log("Book ID =",bookId)
-                this.books = this.books.map((item)=>{
-                    if(item.bookId === bookId){
-                        return {...item, isVisible:!item.isVisible};
-                    }
-                    return item;
-                })
-            }
+            toggleVisible(bookId) {
+            console.log("Toggling visibility for bookId:", bookId);
+            this.books = this.books.map((item) => {
+                if (item.bookId === bookId) {
+                    return { ...item, isVisible: !item.isVisible };
+                }
+                return item;
+            });
+        }
         
     }
 }

@@ -1,7 +1,7 @@
 <template>
 <div>
     <li>
-        {{bookImage }}
+        <!-- {{bookImage }} -->
     <h1>{{ bookName }}</h1>
     <button @click="showDetails()">more details</button>
     <transition name="fade">
@@ -45,11 +45,12 @@ export default{
         // "bookTitle",
         // "bookDesc",
 
-        // bookId:{
-        //     type:Number,
-        //     requireed:true
+        bookId:{
+            type:Number,
+            requireed:true
 
-        // },
+        },
+
         bookName:{
             type: String,
             requireed:true
@@ -71,11 +72,9 @@ export default{
 
         },
         isVisible:{
-            typr: Boolean
+            type: Boolean
         },
-        bookImage:{
-            type: String
-        },
+
 
     },
 
@@ -85,8 +84,10 @@ export default{
             showLoading: LOADING_SPINNER_SHOW_MUTATION,
     }),
         showDetails(){
+            console.log("Emitting show event with bookId:", this.bookId);
+            this.$emit("show", this.bookId);
             // console.log(bookId);
-            this.$emit("show");
+            //this.$emit("show");
         }
     }
 };

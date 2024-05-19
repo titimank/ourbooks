@@ -66,10 +66,12 @@ export default {
                 this.password,
                 );
             this.error = validations.checkValidations();
-            if(this.error.length === 0){
+            if(this.error.length > 0){
                 // if('email' in this.errors || 'password' in this.errors){
-                    return true;
+                    return false;
             }
+            // this.$router.push('/');
+
             // this.error ='';
             this.showLoading(true);
             try {
