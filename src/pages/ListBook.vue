@@ -62,7 +62,7 @@ export default{
                 {bookId:2, bookName:"รามเกียรติ" , bookAuthor:"รัชกาลที่ 5", bookCategory:"Magazine", bookCon:"ปกพอง เคยเปียกน้ำ", isVisible:false},
             ],
 
-            // books: []
+            // books: [books]
         };
     },
     methods:{

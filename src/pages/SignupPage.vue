@@ -151,6 +151,8 @@ export default {
                     phone: phone,
                     address: address
                 };
+                console.log("thissssssss: ",requestBody)
+
                 const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/register`, {
                     method: "POST",
                     headers: {
