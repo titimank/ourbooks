@@ -1,42 +1,34 @@
 <template>
     <!-- <NavBar /> -->
-    <the-loader v-if="showLoading"></the-loader>
+    <!-- <the-loader v-if="showLoading"></the-loader> -->
     <!-- <div class="contrainer"> -->
-        <!-- <div class="row">
+    <!-- <div class="row">
             <div class="col-md-12">
                 <div>
                     <router-view></router-view> -->
-                    <!-- <div>{{ accessToken }}</div>
+    <!-- <div>{{ accessToken }}</div>
                     <hr>
                     <div>{{ UsersData }}</div>
                     <hr>
                     <div>{{ BooksData }}</div>
                     <hr>
                     <div>{{ BookIdData }}</div> -->
-                    <!-- <div>{{ Users }}</div>
+    <!-- <div>{{ Users }}</div>
                     <hr> -->
-                <!-- </div>
+    <!-- </div>
             </div>
         </div> -->
     <!-- </div> -->
     <div>
-            <AddBook @add-book="addBook" />
-    <div>
-        <ul >
-            <ShowBook v-for="item in books"
-                            :key="item.bookId"
-                            :bookId="item.bookId"
-                            :bookName="item.bookName"
-                            :bookAuthor="item.bookAuthor"
-                            :bookCategory="item.bookCategory"
-                            :bookDesc="item.bookDesc"
-                            :bookCon="item.bookCon"
-                            :isVisible="item.isVisible"
-                            @show="toggleVisible"
-            />
-        </ul>
+        <!-- <AddBook @add-book="addBook" /> -->
+        <div>
+            <ul>
+                <ShowBook v-for="item in books" :key="item.bookId" :bookId="item.bookId" :bookName="item.bookName"
+                    :bookAuthor="item.bookAuthor" :bookCategory="item.bookCategory" :bookDesc="item.bookDesc"
+                    :bookCon="item.bookCon" :isVisible="item.isVisible" @show="toggleVisible" />
+            </ul>
+        </div>
     </div>
-</div>
 
 </template>
 
@@ -46,39 +38,41 @@ import ShowBook from './ShowBook.vue'
 // import AddBook from './AddBook.vue';
 
 
-export default{
-    name:"ListBook",
-    components:{
+export default {
+    name: "ListBook",
+    components: {
         ShowBook,
         // AddBook
     },
     // props:["books"]
-    data(){
+    data() {
         return {
-            // books:[
-            //     {bookId:1, bookName:"พระอภัยมณี" , bookAuthor:"สุนทรภู่", bookCategory:"Horror", bookDesc:"นิทานพื้นบ้าน", isVisible:false},
-            //     {bookId:2, bookName:"รามเกียรติ" , bookAuthor:"รัชกาลที่ 5", bookCategory:"Magazine", bookCon:"ปกพอง เคยเปียกน้ำ", isVisible:false},
-            // ],
 
-            books: []
+            //exsample info//
+            books: [
+                { bookId: 1, bookName: "พระอภัยมณี", bookAuthor: "สุนทรภู่", bookCategory: "Horror", bookDesc: "นิทานพื้นบ้าน", isVisible: false },
+                { bookId: 2, bookName: "รามเกียรติ", bookAuthor: "รัชกาลที่ 5", bookCategory: "Magazine", bookCon: "ปกพอง เคยเปียกน้ำ", isVisible: false },
+            ],
+
+            // books: [books]
         };
     },
-    methods:{
-            addBook(book) {
-                this.books.push(book);
-            },
+    methods: {
+        addBook(books) {
+            this.books.push(books);
+        },
 
 
-            toggleVisible(bookId){
-                // console.log("Book ID =",bookId)
-                this.books = this.books.map((item)=>{
-                    if(item.bookId === bookId){
-                        return {...item, isVisible:!item.isVisible};
-                    }
-                    return item;
-                })
-            }
-        
+        toggleVisible(bookId) {
+            console.log("Toggling visibility for bookId:", bookId);
+            this.books = this.books.map((item) => {
+                if (item.bookId === bookId) {
+                    return { ...item, isVisible: !item.isVisible };
+                }
+                return item;
+            });
+        }
+
     }
 }
 
@@ -187,8 +181,8 @@ export default {
     }
 }
 </script> -->
- 
- 
+
+
 <style>
 /* *{
     box-sizing: border-box;
@@ -198,9 +192,8 @@ body{
 }
 .listbook-content */
 
-ul{
+ul {
     list-style: none;
     padding: 0;
 }
-
 </style>
