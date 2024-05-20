@@ -17,8 +17,11 @@
           <router-link class="nav-link" to="/">Home</router-link>
           <!-- <a class="nav-link" href="#">Home</a> -->
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <router-link class="nav-link" to="/user">User</router-link>
+        </li> -->
+        <li class="nav-item">
+          <router-link class="nav-link" to="/addbook">Add Book</router-link>
         </li>
         <li class="nav-item">
           <router-link class="nav-link" to="/login">Login</router-link>
@@ -46,10 +49,10 @@
       </li> -->
 
       </ul>
-      <form class="form-inline my-2 my-lg-0">
+      <!-- <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
+      </form> -->
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit" @click=logOut()>Log out</button>
     </div>
   </nav>
