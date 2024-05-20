@@ -108,7 +108,7 @@ export default {
 
       // errors:[],
       // error:'',
-      error: {},
+      error: [],
 
       accessToken: null,
       userId: null,
@@ -133,14 +133,14 @@ export default {
     // },
 
     onAddBook() {
-      this.postBookId(
-        this.bookName,
-        this.bookAuthor,
-        this.bookCategory,
-        this.bookDesc,
-        this.bookCon
-        // this.bookImage,
-      );
+      // this.postBookId(
+      //   this.bookName,
+      //   this.bookAuthor,
+      //   this.bookCategory,
+      //   this.bookDesc,
+      //   this.bookCon
+      //   // this.bookImage,
+      // );
       // this.error = {};
       let validations = new AddbookValidations(
         this.bookName,
@@ -148,9 +148,14 @@ export default {
         // this.bookImage,
       );
       this.error = validations.checkValidations();
-      if (this.error.length === 0) {
-        return true;
+      // if (this.error.length === 0) {
+      //   return true;
+      // }
+
+      if (Object.keys(this.error).length > 0) {
+                return false;
       }
+
       // this.addbook({
       //     // donationCategory: this.donationCategory,
       //     bookName: this.bookName,
@@ -166,22 +171,22 @@ export default {
       // this.error = error;
       // });
 
-      const addbook = {
-        bookId: Date.now(),
-        bookName: this.bookName,
-        bookAuthor: this.bookAuthor,
-        bookCategory: this.bookCategory,
-        bookDesc: this.bookDesc,
-        bookCon: this.bookCon,
-        isVisible: false,
-      };
-      this.$emit("add-book", addbook);
-      this.resetForm();
+      // const addbook = {
+      //   bookId: Date.now(),
+      //   bookName: this.bookName,
+      //   bookAuthor: this.bookAuthor,
+      //   bookCategory: this.bookCategory,
+      //   bookDesc: this.bookDesc,
+      //   bookCon: this.bookCon,
+      //   isVisible: false,
+      // };
+      // this.$emit("add-book", addbook);
+      // this.resetForm();
 
-      if (Object.keys(this.error).length === 0) {
-        console.log("ok");
-        this.$router.push("/");
-      }
+      // if (Object.keys(this.error).length === 0) {
+      //   console.log("ok");
+      //   this.$router.push("/");
+      // }
 
       this.postBookId(
         this.bookName,
@@ -189,8 +194,20 @@ export default {
         this.bookCategory,
         this.bookDesc,
         this.bookCon
-      );
+      )
+
+      
+      if (Object.keys(this.error).length === 0) {
+        console.log("ok");
+        this.$router.push("/");
+      }
+
     },
+    // onCancel(){
+    //   console.log("ok");
+    //     this.$router.push("/");
+    // }
+  // },
     getAccessToken() {
       let cookieName = encodeURIComponent("access-token");
       let cookieStart = document.cookie.indexOf(cookieName);
@@ -265,7 +282,9 @@ export default {
       this.bookDesc = "";
       this.bookCon = "";
       // this.bookImage=null;
-      this.error = {};
+      this.error = [];
+              this.$router.push("/");
+
     },
 
     // submitForm(){

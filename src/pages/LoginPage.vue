@@ -47,8 +47,8 @@ export default {
         return {
             email: '', 
             password: '',
-            errors: [],
-            error: {},
+            // errors: [],
+            error: [],
             userLogin: null,
             LoginMe: null
         };
@@ -66,10 +66,14 @@ export default {
                 this.password,
                 );
             this.error = validations.checkValidations();
-            if(this.error.length > 0){
-                // if('email' in this.errors || 'password' in this.errors){
-                    return false;
+            if (Object.keys(this.error).length > 0) {
+                return false;
             }
+
+            // if(this.error.length > 0){
+            //     // if('email' in this.errors || 'password' in this.errors){
+            //         return false;
+            // }
             // this.$router.push('/');
 
             // this.error ='';
@@ -89,6 +93,11 @@ export default {
             // if (Object.keys(this.error).length === 0) {
             //     this.$router.push('/');
             // }
+
+            if (Object.keys(this.error).length === 0) {
+                console.log("ok");
+                this.$router.push("/");
+            }
 
 
 
