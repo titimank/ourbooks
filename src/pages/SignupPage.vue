@@ -25,6 +25,8 @@
                     <label>First Name</label>
                     <input type="text"  v-model.trim="firstname" />
                     <div class="form-text text-muted" v-if="error.firstname">{{ error.firstname }}</div>
+                    <!-- <div key=""v-for="error in errors">{{ error }}</div> -->
+
                 </div>
                 <div class="form-group">
                     <label>Last Name</label>
@@ -81,8 +83,8 @@ export default {
             password: '',
             phone: '',
             address: '',
-            errors:[],
-            error: {},
+            // errors:[],
+            error: [],
 
             userSignup: null
         };
@@ -95,15 +97,23 @@ export default {
         ...mapMutations({
             showLoading: LOADING_SPINNER_SHOW_MUTATION,
         }),
+
+        // onSigmup(e) {
+        //     if(this.name && this.age) return true;
+        //     this.errors = [];
+        //     if(!this.name) this.errors.push("Name required.");
+        //     if(!this.age) this.errors.push("Age required.");
+        //     e.preventDefault();
+        // },
         
-        onSignup() {
-            this.PostSignupUser(
-                this.firstname, 
-                this.lastname, 
-                this.email, 
-                this.password, 
-                this.phone, 
-                this.address)
+        onSignup() {           
+            // this.PostSignupUser(
+            //     this.firstname, 
+            //     this.lastname, 
+            //     this.email, 
+            //     this.password, 
+            //     this.phone, 
+            //     this.address)
 
             let validations = new SignupValidations(
                 this.firstname,
@@ -112,12 +122,39 @@ export default {
                 this.password,
                 this.phone,
                 this.address,
-                );
-            this.error = validations.checkValidations();
+            );
+            this.error = validations.checkValidations()
             // if(this.errors.length < 1){
-            if(this.error.length === 0 ){
-                return true;
-        }
+            // if(this.error.length > 0 ){
+            //     return false;
+            // }
+            // if(!this.error.length) return true;
+            if (Object.keys(this.error).length > 0) {
+                return false;
+            }
+
+
+            // this.errors = [];
+            // if(!this.name) this.errors.push("Name required.");
+            // if(!this.email) {
+            //     this.errors.push("Email required.");
+            // } else if(!this.validEmail(this.email)) {
+            //     this.errors.push("Valid email required.");        
+            // }
+            // if(!this.errors.length) return true;
+            // e.preventDefault();
+            
+
+
+            
+            // this.PostSignupUser(
+            //     this.firstname, 
+            //     this.lastname, 
+            //     this.email, 
+            //     this.password, 
+            //     this.phone, 
+            //     this.address);
+
             this.signup({
                 firstname: this.firstname, 
                 lastname: this.lastname, 
@@ -129,9 +166,36 @@ export default {
                 // console.log(error);
             this.error = error;
             });
+            //no error go to homepage-unvaliable
+            // if (Object.keys(this.error).length === 0) {
+            //     console.log("ok")
+            //     this.$router.push('/');
+            // }
+            this.PostSignupUser(
+                this.firstname, 
+                this.lastname, 
+                this.email, 
+                this.password, 
+                this.phone, 
+                this.address)
+
+            if (Object.keys(this.error).length === 0) {
+                console.log("ok")
+            this.$router.push('/');
+            }
+
             // this.PostSignupUser(this.firstname, this.lastname, this.email, this.password, this.phone, this.address)
     // }},
         },
+        // validEmail:function(email) {
+        //     var re =  /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/;
+        //     return re.test(email);
+        // },
+
+        
+
+
+
         async PostSignupUser(firstname, lastname, email, password, phone, address) {
             console.log(process.env.VUE_APP_API_URL);
             try {
@@ -143,6 +207,8 @@ export default {
                     phone: phone,
                     address: address
                 };
+                console.log("thissssssss: ",requestBody)
+
                 const response = await fetch(`${process.env.VUE_APP_API_URL}/v1/register`, {
                     method: "POST",
                     headers: {
@@ -205,9 +271,9 @@ export default {
         },        
         address(){
             if(this.phone.length < 10) {
-                this.error.phone= 'Please enter address';
+                this.error.phone= 'Address must be at 5 character long';
             }
-            if(this.address.length > 10) {
+            if(this.address.length > 5) {
                 this.error.address = '';
             }
 
