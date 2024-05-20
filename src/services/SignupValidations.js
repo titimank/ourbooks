@@ -11,24 +11,24 @@ export default class SignupValidations {
     }
 
     checkValidations() {
-        let errors = [];
+        let error = [];
 
         if (!Validations.minLength(this.firstname, 3 )) {
-            errors['firstname'] = 'Plase enter Firstname';
+            error['firstname'] = 'Plase enter Firstname';
         }
 
         if (!Validations.minLength(this.lastname, 3 )) {
-            errors['lastname'] = 'Plase enter Lastname';
+            error['lastname'] = 'Plase enter Lastname';
         }
 
         //email validations
         if (!Validations.checkEmail(this.email)) {
-            errors['email'] = 'Invalid Email';
+            error['email'] = 'Invalid Email';
         }
 
         //password Validations
         if (!Validations.minLength(this.password, 6)) {
-            errors['password'] = 'password should be of 6 characters';
+            error['password'] = 'password should be of 6 characters';
         }
 
         // if (!this.phone.(this.phone, 10  )) {
@@ -36,18 +36,18 @@ export default class SignupValidations {
         // }
 
         if (!/^\d{10}$/.test(this.phone)) {
-            errors['phone'] = 'Please enter phone number';
+            error['phone'] = 'Please enter phone number';
         }
 
 
-        if (!Validations.minLength(this.address, 10 )) {
-            errors['address'] = 'Plase enter address';
+        if (!Validations.minLength(this.address, 5 )) {
+            error['address'] = 'Plase enter address';
         }
 
         // console.log("Please fill the information!")
 
-        return errors;
-    }
+        return error;
+    } 
 
     static getErrorMessageFromCode(errorCode) {
         switch (errorCode) {
