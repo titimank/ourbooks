@@ -47,8 +47,8 @@ export default {
         return {
             email: '', 
             password: '',
-            errors: [],
-            error: {},
+            // errors: [],
+            error: [],
             userLogin: null,
             LoginMe: null
         };
@@ -66,10 +66,16 @@ export default {
                 this.password,
                 );
             this.error = validations.checkValidations();
-            if(this.error.length > 0){
-                // if('email' in this.errors || 'password' in this.errors){
-                    return true;
+            if (Object.keys(this.error).length > 0) {
+                return false;
             }
+
+            // if(this.error.length > 0){
+            //     // if('email' in this.errors || 'password' in this.errors){
+            //         return false;
+            // }
+            // this.$router.push('/');
+
             // this.error ='';
             this.showLoading(true);
             try {
@@ -83,6 +89,18 @@ export default {
                 this.showLoading(false);
             }
             this.showLoading(false);
+
+            // if (Object.keys(this.error).length === 0) {
+            //     this.$router.push('/');
+            // }
+
+            if (Object.keys(this.error).length === 0) {
+                console.log("ok");
+                this.$router.push("/");
+            }
+
+
+
         }, async PostLoginUser(email, password) {
             console.log(email);
             try {
