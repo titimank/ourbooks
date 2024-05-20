@@ -8,23 +8,23 @@ export default class LoginValidations {
     }
 
     checkValidations() {
-        let errors = [];
+        let error = [];
 
         //email validations
         if (!Validations.checkEmail(this.email)) {
-            errors['email'] = 'Invalid Email';
+            error['email'] = 'Invalid Email';
         }
 
         //password Validations
         if (!Validations.minLength(this.password, 6)) {
-            errors['password'] = 'password should be of 6 characters';
+            error['password'] = 'password should be of 6 characters';
         }
 
         // if (!this.phone.(this.phone, 10  )) {
         //     errors['bookName'] = 'Please enter a valid phone number';
         // }
 
-        return errors;
+        return error;
     }
 
     static getErrorMessageFromCode(errorCode) {
